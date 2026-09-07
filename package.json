@@ -1,0 +1,12 @@
+{
+  "name": "clarinavi",
+  "private": true,
+  "description": "ClariNavi unified lightweight market research platform",
+  "scripts": {
+    "start": "node server.js",
+    "check": "node --check app.js && node --check server.js && node --check api/index.js"
+  },
+  "engines": {
+    "node": "22.x"
+  }
+}

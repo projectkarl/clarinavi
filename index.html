@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1,viewport-fit=cover" name="viewport"/>
+<meta content="#0b0d12" name="theme-color"/>
+<meta content="ClariNavi 智慧投資研究平台：市場、板塊、個股、籌碼、配息與投資組合研究。" name="description"/>
+<link href="/manifest.webmanifest" rel="manifest"/>
+<link href="/icon-192.png" rel="icon" sizes="192x192" type="image/png"/>
+<link href="/icon-192.png" rel="apple-touch-icon"/>
+<link href="/app.css" rel="stylesheet"/>
+<title>ClariNavi｜智慧投資研究平台</title>
+</head>
+<body class="theme-noir">
+<div class="app"><header class="topbar"><div class="brand"><div class="logo">C</div><div class="brandText"><b>ClariNavi</b><span>看懂市場 · 找到方向</span></div></div><nav class="desktopNav"><button class="navBtn active" data-screen="market">行情</button><button class="navBtn" data-screen="etf">ETF</button><button class="navBtn" data-screen="rank">排行</button><button class="navBtn" data-screen="watch">自選</button><button class="navBtn" data-screen="industry">產業</button><button class="navBtn" data-screen="radar">強勢雷達</button></nav><button aria-label="設定" class="iconBtn" id="settingsBtn"><svg fill="none" stroke="currentColor" stroke-width="1.8" viewbox="0 0 24 24"><path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z"></path><path d="M19.4 15a1.8 1.8 0 0 0 .36 1.98l.06.06-2.12 2.12-.06-.06a1.8 1.8 0 0 0-1.98-.36 1.8 1.8 0 0 0-1.1 1.65V20.5h-3v-.09a1.8 1.8 0 0 0-1.1-1.65 1.8 1.8 0 0 0-1.98.36l-.06.06-2.12-2.12.06-.06A1.8 1.8 0 0 0 6.6 15a1.8 1.8 0 0 0-1.65-1.1h-.09v-3h.09A1.8 1.8 0 0 0 6.6 9a1.8 1.8 0 0 0-.36-1.98l-.06-.06 2.12-2.12.06.06A1.8 1.8 0 0 0 10.34 5a1.8 1.8 0 0 0 1.1-1.65v-.09h3v.09A1.8 1.8 0 0 0 15.54 5a1.8 1.8 0 0 0 1.98-.36l.06-.06 2.12 2.12-.06.06A1.8 1.8 0 0 0 19.4 9a1.8 1.8 0 0 0 1.65 1.1h.09v3h-.09A1.8 1.8 0 0 0 19.4 15Z"></path></svg></button></header>
+<section class="screen active" id="screen-market"><div id="globalUpdateStamp" class="updateStamp" aria-live="polite">更新 --:--:--</div><div class="searchDock"><div class="searchRow"><div class="marketSwitch"><button class="marketBtn active" data-market="TW">台股</button><button class="marketBtn" data-market="US">美股</button></div><input autocomplete="off" class="searchInput" id="q" inputmode="text" placeholder="2330 / 0050"/><button class="goBtn" id="go">查詢</button></div><div class="quick" id="quick"></div><div class="status" id="status">輸入股票或 ETF 代號，查詢行情、圖表與研究資訊。</div></div>
+<div class="marketHome" id="marketHome">
+<section class="homeHero homePanel">
+<div class="homeHead"><div><h1>市場總覽</h1><p>主要指數、期貨與台股盤面一覽</p></div><div class="headActions"><span class="pill" id="globalTime">—</span><button class="refreshBtn homeRefresh" id="homeRefresh">更新</button></div></div>
+<div class="globalPairs" id="globalPairs"><div class="homeSkeleton"></div><div class="homeSkeleton"></div><div class="homeSkeleton"></div></div>
+<div class="homeSource" id="globalSource">公開市場資料可能延遲，交易前請以交易所或券商即時行情為準。</div>
+<div class="broadcastCard marketBroadcast" id="marketBroadcast">
+<div class="broadcastAvatar" data-avatar=""></div>
+<div class="broadcastBody"><div class="broadcastEyebrow"><b>市場盤勢播報</b><span class="broadcastState" id="marketBroadcastState">等待資料</span></div><div class="broadcastText" id="marketBroadcastText">更新市場資料後，會整理主要指數、期貨方向、產業強弱與權重股影響。</div><div class="broadcastMeta" id="marketBroadcastMeta">僅供市場研究參考</div></div>
+<div class="broadcastActions"><button class="voiceBtn primary broadcastPlay" id="marketSpeakBtn">▶ 聽播報</button><button class="voiceBtn broadcastMiniStop" id="marketStopBtn">■ 停止</button></div>
+</div>
+</section>
+<section class="serviceDock" id="serviceDock" aria-label="研究與服務工具">
+<div class="serviceDockHead"><div><b>研究工具</b><span>非看盤必要功能，點選後才載入</span></div></div>
+<div class="serviceDockRow">
+<button type="button" class="serviceIcon" data-service-screen="portfolio" aria-label="投資組合"><span class="serviceGlyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16v12H4z"/><path d="M8 7V5h8v2M4 12h16"/></svg></span><b>投組</b></button>
+<button type="button" class="serviceIcon" data-service-screen="calendar" aria-label="配息行事曆"><span class="serviceGlyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 4v3M19 4v3M4 8h16v12H4z"/><path d="M8 12h3M13 12h3M8 16h3"/></svg></span><b>配息</b></button>
+<button type="button" class="serviceIcon" data-service-screen="ipo" aria-label="股票申購"><span class="serviceGlyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 3h9l3 3v15H6z"/><path d="M14 3v4h4M9 11h6M9 15h6"/></svg></span><b>申購</b></button>
+<button type="button" class="serviceIcon" data-service-screen="institutional" aria-label="法人排行"><span class="serviceGlyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19V9M10 19V5M16 19v-7M22 19V3"/><path d="M2 19h20"/></svg></span><b>法人</b></button>
+<button type="button" class="serviceIcon" data-service-screen="alerts" aria-label="市場警示"><span class="serviceGlyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3 21 20H3L12 3Z"/><path d="M12 9v5M12 17h.01"/></svg></span><b>警示</b></button>
+<button type="button" class="serviceIcon" data-service-screen="news" aria-label="財經新聞"><span class="serviceGlyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 5h13a3 3 0 0 1 3 3v11H6a2 2 0 0 1-2-2V5Z"/><path d="M8 9h8M8 13h8M8 17h5"/></svg></span><b>新聞</b></button>
+<button type="button" class="serviceIcon" data-service-screen="kol" aria-label="KOL 市場動態"><span class="serviceGlyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="8" r="3"/><path d="M3.5 19a5.5 5.5 0 0 1 11 0M16 8h5M16 12h4"/></svg></span><b>KOL</b></button>
+<button type="button" class="serviceIcon" data-service-action="settings" aria-label="資料與顯示設定"><span class="serviceGlyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.8 1.8 0 0 0 .36 1.98l.06.06-2.12 2.12-.06-.06a1.8 1.8 0 0 0-1.98-.36A1.8 1.8 0 0 0 14.56 20.4v.1h-5.1v-.1a1.8 1.8 0 0 0-1.16-1.66 1.8 1.8 0 0 0-1.98.36l-.06.06-2.12-2.12.06-.06A1.8 1.8 0 0 0 4.56 15 1.8 1.8 0 0 0 2.9 13.9h-.1V10.1h.1A1.8 1.8 0 0 0 4.56 9a1.8 1.8 0 0 0-.36-1.98l-.06-.06 2.12-2.12.06.06A1.8 1.8 0 0 0 8.3 5.26 1.8 1.8 0 0 0 9.46 3.6v-.1h5.1v.1a1.8 1.8 0 0 0 1.16 1.66 1.8 1.8 0 0 0 1.98-.36l.06-.06 2.12 2.12-.06.06A1.8 1.8 0 0 0 19.44 9a1.8 1.8 0 0 0 1.66 1.1h.1v3.8h-.1A1.8 1.8 0 0 0 19.4 15Z"/></svg></span><b>設定</b></button>
+</div>
+</section>
+<section class="homePanel todayFocusPanel">
+<div class="homeHead compact"><div><h2>今日焦點</h2><p>強勢觀察、除權息與重要事件的快速入口</p></div><div class="headActions"><span class="pill" id="focusUpdated">—</span><button class="refreshBtn miniRefresh" id="focusRefresh">更新</button></div></div>
+<div class="todayFocus" id="todayFocus"><div class="focusSkeleton"></div><div class="focusSkeleton"></div><div class="focusSkeleton"></div></div>
+<div class="homeSource">焦點由公開行情、除權息預告與既有研究資料聚合；僅供快速瀏覽，不構成投資建議。</div>
+</section>
+<div class="homeSplit discoverySplit">
+<section class="homePanel homeCompactPanel">
+<div class="homeHead compact"><div><h2>台股即時排行</h2><p>上市＋上櫃前 100 名，首頁先顯示前 8 名</p></div><button class="refreshBtn" id="rankHomeMore">查看前100</button></div>
+<div class="miniTabs" id="rankHomeTabs"><button class="active" data-rank-home="price">股價</button><button data-rank-home="gain">漲幅</button><button data-rank-home="loss">跌幅</button><button data-rank-home="volume">成交量</button><button data-rank-home="turnover">成交額</button></div>
+<div class="compactRankList" id="rankHomeList"><div class="skeleton"></div></div>
+<div class="homeSource" id="rankHomeSource">TWSE / TPEx 官方公開行情；盤中價格採最佳努力近即時。</div>
+</section>
+<section class="homePanel homeCompactPanel">
+<div class="homeHead compact"><div><h2>ETF 熱門</h2><p>官方基金資料＋公開交易資訊</p></div><button class="refreshBtn" id="etfHomeMore">ETF專區</button></div>
+<div class="miniTabs" id="etfHomeTabs"><button class="active" data-etf-home="volume">成交量</button><button data-etf-home="change">漲幅</button><button data-etf-home="loss">跌幅</button><button data-etf-home="regular">定期定額</button></div>
+<div class="compactRankList" id="etfHomeList"><div class="skeleton"></div></div>
+<div class="homeSource" id="etfHomeSource">TWSE 基金基本資料、MIS 公開市況與 ETFRank。</div>
+</section>
+</div>
+<div class="homeSplit">
+<section class="homePanel">
+<div class="homeHead compact"><div><h2>產業熱力圖</h2><p>台股主要類股當日漲跌</p></div><span class="pill" id="sectorTime">—</span></div>
+<div class="heatGrid" id="sectorHeatmap"><div class="homeSkeleton tall"></div></div>
+<div class="homeSource">資料來源：TWSE 公開成交資料與產業分類。區塊面積＝成交金額占比；紅＝上漲、綠＝下跌。</div>
+</section>
+<section class="homePanel">
+<div class="homeHead compact"><div><h2>大盤點數貢獻</h2><p>權重股對加權指數的當日估算影響</p></div><span class="pill" id="contribTime">估算 · —</span></div>
+<div class="contribList" id="contribList"><div class="homeSkeleton tall"></div></div>
+<div class="homeSource">資料來源：TWSE 公開行情與公司股本。點數貢獻為近似估算，非交易所正式貢獻值。</div>
+</section>
+</div>
+<div class="legalNote homeLegal">市場與期貨資料可能延遲；不同市場交易時段不一致。以上資訊僅供研究參考，不構成投資建議。</div>
+</div>
+<div class="hidden" id="stockResult"><div class="stockShell"><article class="quoteCard"><div class="quoteTop"><div class="nameRow"><div class="stockIdentity"><div class="stockName" id="stockName">—</div><div class="subName" id="stockMeta">—</div></div><button aria-label="查看 ETF 成分股" class="etfHoldBtn hidden" id="etfHoldBtn" type="button"><svg fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"></path></svg>成分股</button></div><div class="stockActions"><button aria-label="加入自選" class="starBtn" id="favBtn">☆</button><button aria-label="設定提醒" class="alertBtn" id="alertBtn">♢</button><button aria-label="技術觀點" class="adviceBtn" id="adviceBtn"><svg fill="none" height="18" stroke="currentColor" stroke-width="1.8" viewbox="0 0 24 24" width="18"><path d="M4 16l4-5 4 3 5-8 3 2"></path><path d="M18 6h2v2"></path></svg></button></div></div><div class="priceLine"><div class="price" id="price">—</div><div class="chg muted" id="chg">—</div></div><div class="quoteMeta"><span class="pill" id="freshPill">—</span><span class="pill" id="assetPill">—</span></div><div class="researchAdvice" id="researchAdvice"><div class="researchAdviceTop"><b id="researchAdviceTitle">研究觀點</b><span class="researchScore" id="researchScore">技術評估中</span></div><div class="researchAdviceText" id="researchAdviceText">綜合技術、籌碼、基本面與公開研究資訊形成研究摘要。</div><div class="researchAdviceMeta" id="researchAdviceMeta"></div><div class="targetList hidden" id="targetList"></div><div class="disclaimerHero">僅供研究參考，不構成投資建議；歷史勝率不代表未來結果。</div></div><div class="broadcastCard stockBroadcast" id="stockBroadcast"><div class="broadcastAvatar" data-avatar=""></div><div class="broadcastBody"><div class="broadcastEyebrow"><b id="stockBroadcastTitle">個股解讀</b><span class="broadcastState" id="stockBroadcastState">等待行情</span></div><div class="broadcastText" id="stockBroadcastText">查詢完成後會整理收盤／盤中狀態、技術趨勢與研究觀察重點。</div><div class="broadcastMeta" id="stockBroadcastMeta">語音由裝置／瀏覽器提供，聲線依裝置而異。</div></div><div class="broadcastActions"><button class="voiceBtn primary broadcastPlay" id="stockSpeakBtn">▶ 聽解讀</button><button class="voiceBtn broadcastMiniStop" id="stockStopBtn">■ 停止</button></div></div><div class="etfValuePanel hidden" id="etfValuePanel"><div class="etfValueItem"><span>盤中預估淨值 iNAV</span><b id="etfNav">—</b></div><div class="etfValueItem"><span>折溢價</span><b id="etfPremium">—</b></div><div class="etfValueItem"><span>價格狀態</span><b id="etfFairness">—</b></div><div class="etfValueHint" id="etfValueHint">ETF 折溢價讀取中…</div></div><div class="quoteStats" id="quoteStats"></div><div class="depthBook" id="depthBook"></div></article>
+<article class="chartCard modernChart"><div class="chartTopline"><div class="seg"><button class="active" id="lineMode">分時走勢</button><button id="techMode">技術 K</button></div><div class="chartLiveBadge" id="chartLiveBadge">行情圖表</div></div><div class="chartPeriodRow"><div class="range" id="intradayBar"><button data-bucket="5">5秒</button><button class="active" data-bucket="60">1分</button><button data-bucket="300">5分</button><button data-bucket="900">15分</button><button data-bucket="3600">60分</button></div><div class="range hidden" id="rangeBar"><button data-months="1">1M</button><button data-months="3">3M</button><button class="active" data-months="6">6M</button><button data-months="12">1Y</button><button data-months="24">2Y</button><button data-months="36">3Y</button></div></div><div class="range hidden" id="kFrameBar" style="padding:0 10px 5px"><button class="active" data-kframe="D">日</button><button data-kframe="W">週</button><button data-kframe="M">月</button></div><div class="indicatorStrip chartMetricDock" id="indicatorStrip"></div><div class="chartLabel"><span id="chartHint">今日 1 分鐘聚合</span><span id="crossInfo">—</span></div><div class="intradayQuick" id="intradayQuick"></div><div class="chartStage"><div class="mainChart" id="mainChart"></div><div class="volumeProfileOverlay hidden" id="volumeProfileOverlay"></div><svg class="drawLayer" id="drawLayer"></svg><div class="chartLoading hidden" id="chartLoading"><span><span class="loader"></span>更新圖表資料…</span></div><div class="chartNotice hidden" id="chartNotice"></div></div><div class="drawTools hidden" id="drawTools"><button data-draw="trend">趨勢線</button><button data-draw="horizontal">水平線</button><button data-draw="fib">斐波那契</button><button data-draw="clear">清除繪圖</button></div><div class="intradayFoot" id="intradayFoot"><span>資料點 <b id="sampleCount">—</b></span><span id="intradaySourceNote">TWSE MIS 5 秒公開快照，1分/5分由瀏覽器聚合</span></div></article>
+<article class="panelCard flowCard hidden" id="flowCard"><div class="flowHead"><div><h3>盤中委託簿壓力</h3><p>呈現 TWSE MIS 買賣五檔委託量快照，觀察買賣盤深度與失衡。</p></div><span class="flowBadge">公開五檔快照 · 非成交資金流</span></div><div class="flowStats" id="flowStats"></div><div class="flowChart" id="flowChart"></div><div class="flowLegend"><span>買方：五檔委買總量</span><span>賣方：五檔委賣總量</span></div><div class="flowNote" id="flowNote">委託簿是尚未成交的掛單快照，可能撤單或改價；不能辨識法人、主力或散戶身分，也不等於實際資金淨流入。</div></article>
+<article class="panelCard signalCard"><div class="sectionHead signalPanelHead"><div><h3>指標提醒</h3><p>顯示趨勢、過熱、突破與背離等重要技術訊號。</p></div><span class="pill">Signals</span></div><div class="hidden" id="overviewGrid"></div><div class="expertRail" id="expertRail"></div></article>
+<article class="panelCard newsPreviewCard"><div class="previewHead"><div><h3>近期新聞</h3><p>依公司名稱／代號整理近 10 則公開新聞</p></div><button id="newsMoreBtn" type="button">展開全部</button></div><div class="newsPreviewGrid" id="newsPreview"><div class="skeleton"></div></div><div class="newsList hidden" id="newsList" style="margin-top:8px"></div></article>
+<div class="subTabs" id="subTabs"><button class="subTab" data-sub="lab">買點實驗室</button><button class="subTab" data-sub="chips">法人 / 大戶</button><button class="subTab" data-sub="fund">財務</button><button class="subTab" data-sub="valuation">估值 / 目標</button><button class="subTab" data-sub="chain">供應鏈</button><button class="subTab" data-sub="compare">比較</button><button class="subTab" data-sub="company">公司資料</button></div>
+<article class="panelCard hidden" id="deepPanel"><section class="subPanel" id="sub-chips"><div class="sectionHead"><div><h3>籌碼研究中心</h3><p>法人累計、融資券、TDCC 集保持股結構、10% 大股東與盤中五檔委託簿壓力；券商分點主力仍需授權資料。</p></div></div><div class="overviewGrid" id="chipSummary"><div class="skeleton"></div></div><div class="chipInsight hidden" id="chipInsight"></div><div class="holderChartWrap hidden" id="holderChartWrap"><div class="holderChartHead"><b>集保持股結構變化</b><span>TDCC 每週股權分散；比較分級持股變化</span></div><div class="holderChart" id="holderChart"></div></div><div id="chipBody" style="margin-top:10px"></div></section>
+<section class="subPanel" id="sub-fund"><div class="sectionHead"><div><h3>財務歷史</h3><p>公司月營收與近季財報；ETF 不適用公司財務項目時會提示。</p></div></div><div class="overviewGrid" id="fundSummary"><div class="skeleton"></div></div><div id="fundBody" style="margin-top:10px"></div></section>
+<section class="subPanel" id="sub-company"><div class="sectionHead"><div><h3>公司基本資料</h3><p>公司主檔、產業資訊與估值摘要。</p></div></div><div class="profileGrid profileWide" id="profile"><div class="skeleton"></div></div><div class="companyDesc hidden" id="companyDesc"></div></section>
+<section class="subPanel" id="sub-lab"><div class="sectionHead"><div><h3>買點實驗室</h3><p>指標依公開市場資料計算；歷史統計僅供研究，不代表未來表現。</p></div><span class="pill">研究工具</span></div><div class="labGrid" id="labRoot"><div class="skeleton" style="grid-column:1/-1;height:240px"></div></div></section>
+<section class="subPanel" id="sub-valuation">
+<div class="sectionHead"><div><h3>估值與目標價</h3><p>公開目標價樣本＋官方財報 EPS／股價推導的本益比河流，按需載入。</p></div><span class="pill">Valuation</span></div>
+<div class="overviewGrid" id="valuationSummary"><div class="skeleton"></div></div>
+<div class="valuationGrid" style="margin-top:10px">
+<div class="valuationChartCard"><div class="valuationChartHead"><div><b>本益比河流</b><span>歷史滾動 EPS × 本益比分位帶</span></div><span class="pill" id="peRiverPeriod">近 3 年</span></div><div class="peRiverChart" id="peRiverChart"><div class="skeleton" style="height:280px"></div></div><div class="sourceNote" id="peRiverSource"></div></div>
+<div class="valuationTargetCard"><div class="valuationChartHead"><div><b>公開目標價</b><span>僅整理可追溯原文的公開樣本</span></div></div><div id="valuationTargetList"><div class="skeleton"></div></div><div class="sourceNote" id="valuationTargetSource"></div></div>
+</div></section><section class="subPanel" id="sub-chain">
+<div class="sectionHead"><div><h3>供應鏈與同業</h3><p>依交易所產業分類建立產業鏈關聯，不把推導結果冒充公司公告的直接供應商／客戶。</p></div><span class="pill">Industry Chain</span></div>
+<div class="overviewGrid" id="chainSummary"><div class="skeleton"></div></div>
+<div class="chainGrid" style="margin-top:10px"><div class="chainCard"><h4>上游關聯</h4><div id="chainUpstream"></div></div><div class="chainCard"><h4>同產業</h4><div id="chainPeers"></div></div><div class="chainCard"><h4>下游關聯</h4><div id="chainDownstream"></div></div></div>
+<div class="sourceNote" id="chainSource"></div></section><section class="subPanel" id="sub-compare"><div class="sectionHead"><div><h3>多股／大盤比較</h3><p>輸入 2–5 檔代號，標準化為起點 100 疊圖；本區只比較股票，不自動加入大盤。</p></div></div><div class="compareBox"><div class="compareTools"><input id="compareInput" placeholder="例如 2330,2454,2308"/><button id="compareRun">比較</button></div><div class="compareChart" id="compareChart"></div><div class="overviewGrid" id="compareStats" style="margin-top:8px"></div></div></section></article></div></div></section>
+<section class="screen" id="screen-etf">
+<div class="pageTitle"><div><h1>ETF 專區</h1><p>ETF 清單、熱門排行與定期定額人氣；只使用官方或可合法公開引用的資料來源。</p></div><div class="pageActions"><span class="microStamp" id="etfMarketUpdated">—</span><button class="refreshBtn" id="etfMarketRefresh">更新</button></div></div>
+<div class="rankToolbar"><div class="rankTabs" id="etfMarketTabs"><button class="active" data-etf-sort="volume">成交量</button><button data-etf-sort="change">漲幅</button><button data-etf-sort="loss">跌幅</button><button data-etf-sort="price">股價</button><button data-etf-sort="regular">定期定額</button><button data-etf-sort="units">發行單位</button></div><input class="toolbarInput" id="etfMarketSearch" placeholder="搜尋 ETF 代號、名稱或追蹤指數"/></div>
+<div class="etfKindTabs" id="etfKindTabs"><button class="active" data-etf-kind="all">全部</button><button data-etf-kind="equity">股票型</button><button data-etf-kind="bond">債券型</button><button data-etf-kind="active">主動式</button><button data-etf-kind="leveraged">槓桿</button><button data-etf-kind="inverse">反向</button><button data-etf-kind="foreign">海外成分</button></div>
+<div class="rankMetaBar"><span class="pill" id="etfMarketCount">—</span><span id="etfMarketStatus">資料尚未載入</span></div>
+<div class="rankTableWrap"><table class="rankTable"><thead><tr><th>排名</th><th>ETF</th><th>價格</th><th>漲跌</th><th>成交量</th><th>成交額</th><th>分類 / 指數</th></tr></thead><tbody id="etfMarketBody"><tr><td colspan="7"><div class="skeleton"></div></td></tr></tbody></table></div>
+<div class="legalNote">資料來源：TWSE「基金基本資料彙總表」、TWSE MIS 公開市況、STOCK_DAY_ALL 與 ETFRank。ETF 商品屬性差異大，槓桿／反向／債券／海外 ETF 不應只用單日排名比較。</div>
+</section>
+<section class="screen" id="screen-rank">
+<div class="pageTitle"><div><h1>台股即時行情排行</h1><p>上市＋上櫃前 100 名。可切股價、漲幅、跌幅、成交量與成交額；頁面開啟時每 15 秒最佳努力刷新。</p></div><div class="pageActions"><span class="microStamp" id="marketRankUpdated">—</span><button class="refreshBtn" id="marketRankRefresh">立即更新</button></div></div>
+<div class="rankToolbar"><div class="rankTabs" id="marketRankTabs"><button class="active" data-rank-sort="price">股價</button><button data-rank-sort="gain">漲幅</button><button data-rank-sort="loss">跌幅</button><button data-rank-sort="volume">成交量</button><button data-rank-sort="turnover">成交金額</button></div><span class="pill livePill" id="marketRankState">盤中 10 秒更新</span></div>
+<div class="rankMarketTabs" id="marketRankMarketTabs"><button class="active" data-rank-market="all">合併</button><button data-rank-market="TWSE">上市</button><button data-rank-market="TPEx">上櫃</button></div>
+<div class="rankTableWrap"><table class="rankTable"><thead><tr><th>名次</th><th>股票 / 股號</th><th>股價</th><th>漲跌</th><th>成交量</th><th>成交額</th><th>市場</th></tr></thead><tbody id="marketRankBody"><tr><td colspan="7"><div class="skeleton"></div></td></tr></tbody></table></div>
+<div class="legalNote">資料來源：TWSE MIS、TWSE STOCK_DAY_ALL、TPEx tpex_mainboard_quotes。屬交易所公開資料的最佳努力近即時呈現，並非券商授權逐筆行情。</div>
+</section>
+<section class="screen" id="screen-watch"><div class="pageTitle"><div><h1>我的自選</h1><p>追蹤真正關心的標的，依漲跌、技術分數或殖利率快速排序。</p></div><button class="refreshBtn" id="refreshWatch">更新台股快照</button></div>
+<div class="watchToolbar"><select id="watchSort"><option value="default">加入順序</option><option value="change">漲跌幅</option><option value="score">技術分數</option><option value="yield">殖利率</option></select><select id="watchGroupFilter"><option value="all">全部分組</option></select><span class="microStamp" id="watchUpdated">資料儲存在此瀏覽器</span></div>
+<div class="watchGrid" id="watchGrid"></div><div class="legalNote">行情來源同個股頁；美股免費模式為日線 / EOD，可能顯示最近一次查詢價格。</div></section>
+<section class="screen" id="screen-portfolio">
+<div class="pageTitle"><div><h1>投資組合</h1><p>追蹤持股損益、查看配置權重，並可選擇匿名公開到績效排行榜。</p></div><div class="pageActions"><button class="refreshBtn" id="portfolioRefresh">更新損益</button><button class="primaryMini" id="portfolioAdd">＋ 新增持股</button></div></div>
+<div class="microStamp" id="portfolioUpdated">台股盤中依公開行情更新；美股免費模式為 EOD。</div>
+<div class="portfolioSummary" id="portfolioSummary"></div><div class="portfolioAnalytics">
+<article class="panelCard portfolioAllocationCard" id="portfolioAllocationCard">
+<div class="sectionHead"><div><h3>投組配置</h3><p>依目前市值；缺行情時以成本市值替代。不同幣別分開呈現。</p></div><span class="pill">Allocation</span></div>
+<div class="portfolioAllocation" id="portfolioAllocation"><div class="empty">加入持股後顯示配置。</div></div>
+</article>
+<article class="panelCard communityPortfolioCard" id="communityPortfolioCard">
+<div class="sectionHead"><div><h3>台股公開投組績效 Top 10</h3><p>依匿名公開時、由 TWSE MIS 驗證的未實現報酬率排序；可查看配置權重，不公開本金、股數或成本。</p></div><button class="primaryMini" id="portfolioPublish">匿名公開</button></div>
+<div class="communityPortfolioList" id="communityPortfolioList"><div class="empty">進入投組頁後按需載入。</div></div>
+<div class="sourceNote" id="communityPortfolioSource">公開資料僅來自使用者主動分享；行情驗證使用 TWSE MIS 公開市況。</div>
+</article>
+</div>
+<div class="portfolioList" id="portfolioList"></div>
+<div class="legalNote">私人投組只保存在目前瀏覽器；公開排行必須由使用者主動匿名分享。未實現損益未計手續費、交易稅、匯率與現金股利。</div>
+</section>
+<section class="screen" id="screen-radar"><div class="pageTitle"><div><h1>強勢雷達</h1><p>多因子強勢候選：技術動能 × 量價 × 突破 × 官方重大訊息 × 近期公開新聞熱度。</p></div><div class="pageActions"><span class="microStamp" id="radarUpdated">—</span><button class="refreshBtn" id="refreshRadar">重新掃描</button></div></div><div class="radarList" id="radarList"><div class="skeleton"></div></div><div class="legalNote">這是公開資料的多因子篩選結果，不是「明牌」或個人化買進建議。為避免誤導，雷達不使用第三方保存的 TDCC 歷史快照作為評分因子；新聞熱度只代表近期曝光，不等於利多。</div></section>
+<section class="screen" id="screen-industry">
+<div class="pageTitle"><div><h1>產業探索</h1><p>依產業分類瀏覽股票，快速縮小研究範圍。</p></div><span class="microStamp" id="industryUpdated">—</span></div>
+<div class="brokerToolbar">
+<div class="marketSwitch compact"><button class="industryMarket active" data-imarket="TW">台股產業</button><button class="industryMarket" data-imarket="US">美股產業</button></div>
+<input class="toolbarInput" id="industrySearch" placeholder="搜尋產業、公司名稱或代號"/>
+</div>
+<div class="status" id="industrySource">資料來源依市場顯示於本頁。</div>
+<div class="industryChips" id="industryChips"><div class="skeleton"></div></div>
+<div class="panelCard industryPanel">
+<div class="sectionHead"><div><h3 id="industryTitle">全部產業</h3><p id="industryNote">選擇產業即可查看公司。</p></div><span class="pill" id="industryCount">—</span></div>
+<div class="industryList" id="industryList"><div class="empty">請先選擇產業。</div></div>
+</div>
+</section>
+<section class="screen" id="screen-calendar">
+<div class="pageTitle"><div><h1>配息行事曆</h1><p>上市＋上櫃除權息預告；高殖利率標示以本次現金股利 ÷ 最近可得股價計算。</p></div><div class="pageActions"><span class="microStamp" id="calendarUpdated">—</span><button class="refreshBtn" id="refreshCalendar">更新</button></div></div>
+<div class="calendarHead">
+<button class="calNav" id="calPrev">‹</button>
+<div><b id="calMonthTitle">—</b><span id="calMonthSub">官方預告資料</span></div>
+<button class="calNav" id="calNext">›</button>
+</div>
+<div class="calendarSummary" id="calendarSummary"></div>
+<div class="calendarCard">
+<div class="weekHead"><span>日</span><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span></div>
+<div class="calendarGrid" id="calendarGrid"><div class="skeleton"></div></div>
+</div>
+<div class="panelCard dividendListCard">
+<div class="sectionHead"><div><h3 id="dayEventTitle">本月除權息清單</h3><p>點日期可只看當日；點股票可回到行情研究頁。</p></div><button class="filterBtn" id="highYieldOnly">只看高殖利率</button></div>
+<div class="dividendList" id="dividendList"><div class="skeleton"></div></div>
+<div class="legalNote">「高殖利率」預設標記單次配息率 ≥ 5%。ETF 若為月配／季配，單次配息率不可直接當成年化殖利率；日期、金額仍以公司與 MOPS 最終公告為準。</div>
+</div>
+</section>
+<section class="screen" id="screen-kol">
+<div class="pageTitle"><div><h1>KOL 市場動態</h1><p>集中查看公開市場人物與企業領袖的最新公開發言。</p></div><div class="pageActions"><span class="microStamp" id="kolUpdated">—</span><button class="refreshBtn" id="kolRefresh">更新</button></div></div>
+<div class="kolHero panelCard"><div><div class="kolKicker">FOLLOW SIGNALS</div><h2>追蹤你在意的市場發言</h2><p>可自行選擇追蹤來源；只有具備官方公開介面或合法授權的來源才會自動抓取全文。</p></div><button class="primaryMini" id="kolManage">管理追蹤</button></div>
+<div class="kolSourceRail" id="kolSourceRail"></div>
+<div class="kolFeed" id="kolFeed"><div class="skeleton" style="height:160px"></div></div>
+<div class="legalNote">公開貼文可能被作者修改或刪除；平台 API、授權與顯示規則可能調整。ClariNavi 僅顯示可合法取得的公開內容與原文連結，不繞過登入、付費牆或平台存取限制。KOL 發言不代表投資建議。</div>
+</section>
+<div class="legalNote" style="margin-top:14px">資料來源：TWSE、TPEx、MOPS、TDCC、ETF 發行投信公開資料與公開新聞索引；美股公開免費模式為 EOD 日線。市場資料可能延遲；研究分數、歷史勝率、技術訊號與播報內容僅供教學與研究參考，不構成投資建議，也不保證未來績效。實際交易請以交易所、公司公告及合法券商資訊為準。</div><div class="thirdPartyNotice">圖表採用 <a href="https://www.tradingview.com/" rel="noopener noreferrer" target="_blank">TradingView</a> Lightweight Charts™。Copyright © TradingView, Inc. · Apache 2.0</div></div>
+<nav class="bottomNav"><button class="active" data-screen="market">行情</button><button data-screen="etf">ETF</button><button data-screen="rank">排行</button><button data-screen="watch">自選</button><button data-screen="more">工具</button></nav>
+<div class="backdrop" id="backdrop"></div>
+<div class="sheet" id="adviceSheet"><div class="grab"></div><div class="sheetHead"><div><h2 id="adviceTitle">技術觀點</h2><p>綜合目前公開行情與技術指標提供研究摘要。</p></div><button class="iconBtn sheetClose">×</button></div><div class="scoreHero"><div class="bigScore" id="adviceScore">—</div><div><b id="adviceLabel">—</b><p id="adviceText" style="margin:5px 0 0">—</p></div></div><div class="reasonChips" id="adviceReasons"></div><p>此功能只提供研究參考，不了解你的資產、風險承受度、持有成本與投資期限，因此不構成個人化投資建議。</p></div>
+<div class="sheet wideSheet" id="etfSheet"><div class="grab"></div><div class="sheetHead"><div><h2 id="etfSheetTitle">ETF 成分股</h2><p id="etfSheetMeta">依投信公開持股完整列示；成分股報價採 TWSE MIS 公開市況最佳努力近即時。</p></div><button class="iconBtn sheetClose">×</button></div><div class="etfSheetTools"><input class="etfFilter" id="etfFilter" placeholder="搜尋成分股代號或名稱"/><span class="etfCount" id="etfCount">—</span></div><div class="skeleton" id="etfHoldingsBody"></div></div>
+<div class="popup" id="constituentPopup"><div class="popupHead"><div class="popupTitle"><h2 id="cqName">—</h2><p id="cqMeta">載入中…</p></div><button class="iconBtn popupClose">×</button></div><div class="popupPriceRow"><div class="popupPrice" id="cqPrice">—</div><div class="chg muted" id="cqChg">—</div></div><div class="popupChart" id="cqChart"></div><div class="popupStats" id="cqStats"></div><div class="indicatorStrip" id="cqTech" style="margin:8px -5px 0;border:0;padding-left:5px"></div><div class="popupActions"><button class="primary" id="cqOpenFull">開啟完整分析</button><button class="secondary popupClose">關閉</button></div></div>
+<div class="sheet" id="alertSheet"><div class="grab"></div><div class="sheetHead"><div><h2>價格 / 技術提醒</h2><p>提醒於本頁開啟期間監測；若瀏覽器允許通知，觸發時可顯示系統通知。</p></div><button class="iconBtn sheetClose">×</button></div><div class="field"><label>到價提醒</label><input id="alertPrice" placeholder="例如 1200" step="0.01" type="number"/></div><div class="field"><label>技術提醒</label><select id="alertSignal" style="width:100%;padding:11px;border:1px solid var(--line);border-radius:12px"><option value="">不設定</option><option value="macdCross">MACD 黃金交叉</option><option value="kdCross">KD 黃金交叉</option><option value="rsi50">RSI 上穿 50</option><option value="maBull">均線轉多頭排列</option><option value="ma20">站上 MA20</option><option value="breakout">突破壓力區</option></select></div><div class="sheetActions"><button class="primary" id="saveAlert">儲存提醒</button><button class="secondary" id="clearAlert">清除</button></div></div><div class="sheet" id="watchGroupSheet"><div class="grab"></div><div class="sheetHead"><div><h2>自選分組</h2><p>用簡單分組整理不同策略或關注主題。</p></div><button class="iconBtn sheetClose">×</button></div><input id="watchGroupCode" type="hidden"/><input id="watchGroupMarket" type="hidden"/><div class="field"><label>分組名稱</label><input id="watchGroupName" placeholder="例如：AI、存股、觀察中"/></div><div class="sheetActions"><button class="primary" id="watchGroupSave">儲存</button><button class="secondary" id="watchGroupClear">移到未分組</button></div></div><div class="sheet" id="portfolioSheet"><div class="grab"></div><div class="sheetHead"><div><h2>持股紀錄</h2><p>輸入平均成本與持有股數；資料只保存在這個瀏覽器。</p></div><button class="iconBtn sheetClose">×</button></div><input id="portEditId" type="hidden"/><div class="field"><label>市場</label><select id="portMarket"><option value="TW">台股 / ETF</option><option value="US">美股 / ETF</option></select></div><div class="field"><label>股票代號</label><input id="portCode" placeholder="2330 / NVDA"/></div><div class="field"><label>名稱（可留白）</label><input id="portName" placeholder="台積電"/></div><div class="field twoFields"><div><label>持有股數</label><input id="portQty" min="0" step="0.001" type="number"/></div><div><label>平均成本價</label><input id="portCost" min="0" step="0.01" type="number"/></div></div><div class="sheetActions"><button class="primary" id="portSave">儲存持股</button><button class="secondary sheetClose">取消</button></div></div>
+<div class="sheet" id="settingsSheet"><div class="grab"></div><div class="sheetHead"><div><h2>設定</h2><p>顯示大小、圖表高度與美股資料金鑰。</p></div><button class="iconBtn sheetClose">×</button></div><div class="field"><label>研究頁排序</label><div class="settingsGrid"><button class="settingChoice" data-layout="research">研究優先</button><button class="settingChoice" data-layout="chart">圖表優先</button><button class="settingChoice" data-layout="news">新聞優先</button></div></div><div class="field"><label>Alpha Vantage API Key（美股日線 / EOD）</label><input id="avKey" placeholder="貼上你的個人 API Key" type="password"/></div><div class="sheetActions"><button class="primary" id="saveKey">儲存</button><button class="secondary" id="clearKey">清除</button></div><div class="field"><label>使用導覽</label><button class="settingChoice fullChoice" id="tourReplay">重新播放新手導覽</button></div><p>美股即時與 15 分鐘延遲行情屬受監管／授權資料；免費模式不宣稱即時。若網站要公開商用，請改接具對外展示權限的市場資料供應商。</p></div>
+<div class="sheet" id="kolSheet"><div class="grab"></div><div class="sheetHead"><div><h2>管理 KOL 追蹤</h2><p>選擇想看的公開來源；設定只儲存在這個瀏覽器。</p></div><button class="iconBtn sheetClose">×</button></div><div class="kolManageList" id="kolManageList"></div><div class="sheetActions"><button class="primary" id="kolSave">儲存追蹤</button><button class="secondary sheetClose">取消</button></div><p>Truth Social 公開帳號可直接更新；X 來源需站方設定官方 X API 金鑰；Facebook 公開頁面需通過 Meta 權限／功能審查。無授權的來源只提供原始帳號入口。</p></div>
+<div class="onboarding" id="onboarding" aria-live="polite">
+  <div class="tourSpot" id="tourSpot" aria-hidden="true"></div>
+  <div class="tourCard" id="tourCard">
+    <button class="tourSkip" id="tourSkip">跳過</button>
+    <div class="tourOrb">C</div>
+    <span class="tourTag" id="tourTag">01 · 行情首頁</span>
+    <h2 id="tourTitle">先看今天市場在走什麼</h2>
+    <p id="tourBody"></p>
+    <div class="tourActionHint" id="tourActionHint">畫面會帶你到實際功能位置</div>
+    <div class="tourDots" id="tourDots"></div>
+    <button class="tourNext" id="tourNext">帶我看看</button>
+    <small>導覽會實際切換頁面與聚焦功能，不會送出交易或修改資料。</small>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+<script defer="" src="/app.js"></script>
+</body>
+</html>
