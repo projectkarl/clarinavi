@@ -1,4 +1,3 @@
-
 /* Self-contained lightweight chart compatibility layer */
 (()=>{
   if(window.LightweightCharts)return;
@@ -121,7 +120,6 @@
   };
 })();
 
-
 (()=>{
   const real=window.fetch.bind(window), cache=new Map(), inflight=new Map();
   const canonical=(u)=>{try{const x=new URL(typeof u==='string'?u:u.url,location.href);if(x.origin!==location.origin||!x.pathname.startsWith('/api/'))return null;x.searchParams.delete('_');return x.pathname+'?'+[...x.searchParams.entries()].sort().map(([k,v])=>encodeURIComponent(k)+'='+encodeURIComponent(v)).join('&')}catch{return null}};
@@ -136,7 +134,6 @@
     inflight.set(key,p);return p.then(r=>r.clone());
   };
 })();
-
 
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)],E=s=>String(s??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
 const fmt=(n,d=2)=>Number.isFinite(n)?Number(n).toLocaleString('zh-TW',{maximumFractionDigits:d}):'—',money=n=>{if(!Number.isFinite(n))return'—';const a=Math.abs(n);if(a>=1e12)return(n/1e12).toFixed(2)+'兆';if(a>=1e8)return(n/1e8).toFixed(2)+'億';if(a>=1e4)return(n/1e4).toFixed(1)+'萬';return fmt(n,0)},lots=n=>Number.isFinite(n)?fmt(n/1000,0)+' 張':'—';
@@ -241,11 +238,11 @@ function renderDepth(s){const bp=s.bidPrices||[],bv=s.bidVolumes||[],ap=s.askPri
 function setEtfButton(s){const b=$('#etfHoldBtn'),on=market==='TW'&&s.assetHint==='ETF';b.classList.toggle('hidden',!on);b.textContent='';if(on)b.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg>成分股'}
 function etfPremiumState(p){if(!Number.isFinite(p))return{label:'—',cls:'',hint:'目前無法判斷折溢價。'};if(p>=2)return{label:'溢價偏高',cls:'warn',hint:`市價較盤中預估淨值高 ${fmt(p,2)}%，追價需留意溢價收斂風險。`};if(p>=.5)return{label:'小幅溢價',cls:'warn',hint:`市價高於預估淨值 ${fmt(p,2)}%，可先比較 iNAV 與買賣價差。`};if(p<=-1)return{label:'明顯折價',cls:'good',hint:`市價低於預估淨值 ${fmt(Math.abs(p),2)}%，屬折價交易，但仍應確認流動性與標的市場時差。`};if(p<=-.3)return{label:'小幅折價',cls:'good',hint:`市價略低於預估淨值 ${fmt(Math.abs(p),2)}%。折價不代表一定便宜，仍需看追蹤標的與流動性。`};return{label:'接近淨值',cls:'',hint:'市價與盤中預估淨值接近，折溢價風險相對較低。'}}
 async function loadEtfNav(s){const box=$('#etfValuePanel');etfNavData=null;if(market!=='TW'||s.assetHint!=='ETF'){box.classList.add('hidden');return}box.classList.remove('hidden');$('#etfNav').textContent='…';$('#etfPremium').textContent='…';$('#etfFairness').textContent='讀取中';$('#etfValueHint').className='etfValueHint';$('#etfValueHint').textContent='讀取 TWSE MIS ETF 盤中預估淨值與折溢價…';try{const j=await fetch(`/api/etf-nav?code=${encodeURIComponent(s.code)}`,{cache:'no-store'}).then(r=>r.json());if(!j.available)throw new Error(j.error||'目前沒有預估淨值');etfNavData={...j,_clientTime:Date.now()};$('#etfNav').textContent=fmt(j.estimatedNav);const p=j.premiumPct,cls=p>0?'up':p<0?'down':'muted';$('#etfPremium').className=cls;$('#etfPremium').textContent=Number.isFinite(p)?`${p>0?'+':''}${fmt(p,2)}%`:'—';const state=etfPremiumState(p);$('#etfFairness').textContent=state.label;$('#etfValueHint').className=`etfValueHint ${state.cls}`;$('#etfValueHint').textContent=`${state.hint}${j.time?' · '+j.time:''}`;renderResearchAdvice()}catch(e){$('#etfNav').textContent='—';$('#etfPremium').textContent='—';$('#etfFairness').textContent='暫無資料';$('#etfValueHint').textContent='盤中預估淨值暫時無法取得，可改以投信官網／TWSE ETF 淨值頁交叉確認。';renderResearchAdvice()}}
-function renderMain(d){lastData=d;current=d.snapshot.code;indicatorMap=seriesMap(d.series||{});loaded.clear();deep={};etfData=null;etfNavData=null;newsItems=null;chipsData=null;targetData=null;destroyFlow();try{holderRO?.disconnect()}catch{};holderRO=null;try{holderChart?.remove()}catch{};holderChart=null;dataLoadedMonths=Number(d.meta?.months)||6;chartRangeMonths=6;intradayBucket=60;$$('#rangeBar button').forEach(b=>b.classList.toggle('active',+b.dataset.months===6));$$('#intradayBar button').forEach(b=>b.classList.toggle('active',+b.dataset.bucket===60));const s=d.snapshot,a=d.analysis;$('#stockResult').classList.remove('hidden');$('#stockName').textContent=`${s.name} ${s.code}`;$('#stockMeta').textContent=`${s.market} · ${s.date||'最新'} · ${d.meta?.latencyType||''}`;$('#price').textContent=fmt(s.close);const cls=s.change>0?'up':s.change<0?'down':'muted';$('#chg').className=`chg ${cls}`;$('#chg').textContent=`${s.change>0?'+':''}${fmt(s.change)} ${Number.isFinite(s.changePct)?`(${s.changePct>0?'+':''}${fmt(s.changePct,2)}%)`:''}`;$('#freshPill').className=`pill ${s.isRealtimePrice?'live':''}`;$('#freshPill').innerHTML=s.isRealtimePrice?`<span class="pulse"></span>公開近即時 ${E(s.time||'')}`:'最近交易 / EOD';$('#assetPill').textContent=s.assetHint==='ETF'?'ETF / Fund':s.market==='US'?'US Equity':'Stock';const quoteRows=s.market==='US'
- ? [['開',fmt(s.open)],['高',fmt(s.high)],['低',fmt(s.low)],['量',money(s.volume)],...(Number.isFinite(s.pe)?[['PE',fmt(s.pe)]]:[]),...(Number.isFinite(s.yield)?[['殖利率',fmt(s.yield,2)+'%']]:[])]
- : [['開',fmt(s.open)],['高',fmt(s.high)],['低',fmt(s.low)],['量',money(s.volume)],['PE',fmt(s.pe)],['殖利率',Number.isFinite(s.yield)?fmt(s.yield,2)+'%':'—']];
+function renderMain(d){lastData=d;current=d.snapshot.code;indicatorMap=seriesMap(d.series||{});loaded.clear();deep={};etfData=null;etfNavData=null;newsItems=null;chipsData=null;targetData=null;destroyFlow();try{holderRO?.disconnect()}catch{};holderRO=null;try{holderChart?.remove()}catch{};holderChart=null;dataLoadedMonths=Number(d.meta?.months)||6;chartRangeMonths=6;intradayBucket=60;$$('#rangeBar button').forEach(b=>b.classList.toggle('active',+b.dataset.months===6));$$('#intradayBar button').forEach(b=>b.classList.toggle('active',+b.dataset.bucket===60));const s=d.snapshot,a=d.analysis||{score:50,label:'資料載入中',level:'',reasons:[],macd:{}};d.analysis=a;$('#stockResult').classList.remove('hidden');$('#stockName').textContent=`${s.name} ${s.code}`;$('#stockMeta').textContent=`${s.market} · ${s.date||'最新'} · ${d.meta?.latencyType||''}`;$('#price').textContent=fmt(s.close);const cls=s.change>0?'up':s.change<0?'down':'muted';$('#chg').className=`chg ${cls}`;$('#chg').textContent=`${s.change>0?'+':''}${fmt(s.change)} ${Number.isFinite(s.changePct)?`(${s.changePct>0?'+':''}${fmt(s.changePct,2)}%)`:''}`;$('#freshPill').className=`pill ${s.isRealtimePrice?'live':''}`;$('#freshPill').innerHTML=s.isRealtimePrice?`<span class="pulse"></span>公開近即時 ${E(s.time||'')}`:'最近交易 / EOD';$('#assetPill').textContent=s.assetHint==='ETF'?'ETF / Fund':s.market==='US'?'US Equity':'Stock';const quoteRows=[['開',s.open],['高',s.high],['低',s.low],['量',s.volume],['PE',s.pe],['殖利率',s.yield]].filter(([,v])=>v!==null&&v!==undefined&&v!==''&&Number.isFinite(Number(v))).map(([l,v])=>[l,l==='量'?money(Number(v)):l==='殖利率'?fmt(Number(v),2)+'%':fmt(Number(v))]);
 $('#quoteStats').innerHTML=quoteRows.map(([l,v])=>stat(l,v)).join('');renderDepth(s);setEtfButton(s);loadEtfNav(s);$('#adviceBtn').className=`adviceBtn ${a.level||''}`;$('#expertRail').innerHTML=(d.experts||[]).map(x=>`<div class="expert"><strong>${E(x.name)}</strong><small>${E(x.expert)}</small><div class="state ${x.level==='positive'?'up':x.level==='negative'?'down':''}">${E(x.state)}</div><p>${E(x.note||'')}</p></div>`).join('')||`<div class="expert"><strong>技術綜合</strong><div class="state">${E(a.label)}</div><p>${E(adviceNarrative(d))}</p></div>`;$('#newsPreview').innerHTML='<div class="skeleton"></div>';updateFav();saveQuoteCache(d);renderChart();$$('.subTab').forEach(x=>x.classList.remove('active'));$$('.subPanel').forEach(x=>x.classList.remove('active'));$('#deepPanel').classList.add('hidden');$('#newsList').className='newsList hidden';$('#newsList').innerHTML='';$('#newsMoreBtn').textContent='展開全部';renderResearchAdvice();refreshFlow();setTimeout(()=>loadNewsPreview(),260);setTimeout(()=>hydrateResearchAdvice(),420)}
-async function applyLive(code){if(market!=='TW')return;try{const q=await fetch(`/api/quote?code=${encodeURIComponent(code)}`,{cache:'no-store'}).then(r=>r.json());if(current!==code||!q?.available)return;appendSession(q);refreshFlow();if(Number.isFinite(q.price)){const s=lastData.snapshot;s.close=q.price;s.change=q.change;s.changePct=q.changePct;s.time=q.time;s.volume=q.volume??s.volume;s.tradeVolume=q.tradeVolume??s.tradeVolume;s.bidPrices=q.bidPrices||s.bidPrices;s.bidVolumes=q.bidVolumes||s.bidVolumes;s.askPrices=q.askPrices||s.askPrices;s.askVolumes=q.askVolumes||s.askVolumes;s.isRealtimePrice=true;$('#price').textContent=fmt(q.price);$('#chg').textContent=`${q.change>0?'+':''}${fmt(q.change)} ${Number.isFinite(q.changePct)?`(${q.changePct>0?'+':''}${fmt(q.changePct,2)}%)`:''}`;$('#chg').className=`chg ${q.change>0?'up':q.change<0?'down':'muted'}`;$('#freshPill').className='pill live';$('#freshPill').innerHTML=`<span class="pulse"></span>公開近即時 ${E(q.time||'')}`;renderDepth(s);saveQuoteCache(lastData);renderResearchAdvice();if(chartMode==='line')refreshIntradaySeries();if(lastData.snapshot.assetHint==='ETF'&&etfNavData&&Date.now()-(etfNavData._clientTime||0)>15000)loadEtfNav(lastData.snapshot)}}catch{}}
+function mergeAvailableQuote(s,q){if(!s||!q)return s;const map={price:'close',prevClose:'prevClose',change:'change',changePct:'changePct',open:'open',high:'high',low:'low',volume:'volume',tradeVolume:'tradeVolume',upperLimit:'upperLimit',lowerLimit:'lowerLimit',bidPrices:'bidPrices',bidVolumes:'bidVolumes',askPrices:'askPrices',askVolumes:'askVolumes',time:'time',date:'date',name:'name',source:'liveSource'};for(const [src,dst] of Object.entries(map)){const v=q[src];if(v!==null&&v!==undefined&&v!==''&&(!Array.isArray(v)||v.length))s[dst]=v}s.isRealtimePrice=/MIS/.test(String(q.source||''));return s}
+function refreshQuoteUI(s,q){$('#price').textContent=fmt(s.close);const c=s.change;$('#chg').textContent=`${c>0?'+':''}${fmt(c)} ${Number.isFinite(s.changePct)?`(${s.changePct>0?'+':''}${fmt(s.changePct,2)}%)`:''}`;$('#chg').className=`chg ${c>0?'up':c<0?'down':'muted'}`;$('#freshPill').className=`pill ${s.isRealtimePrice?'live':''}`;$('#freshPill').innerHTML=s.isRealtimePrice?`<span class="pulse"></span>公開近即時 ${E(s.time||'')}`:E(q.source||'最近交易 / 延遲備援');const rows=[['開',s.open],['高',s.high],['低',s.low],['量',s.volume],['PE',s.pe],['殖利率',s.yield]].filter(([,v])=>v!==null&&v!==undefined&&v!==''&&Number.isFinite(Number(v))).map(([l,v])=>[l,l==='量'?money(Number(v)):l==='殖利率'?fmt(Number(v),2)+'%':fmt(Number(v))]);$('#quoteStats').innerHTML=rows.map(([l,v])=>stat(l,v)).join('');renderDepth(s)}
+async function applyLive(code){if(market!=='TW')return;try{const q=await fetch(`/api/quote?code=${encodeURIComponent(code)}&_=${Date.now()}`,{cache:'no-store'}).then(r=>r.json());if(current!==code||!q?.available)return;appendSession(q);const s=mergeAvailableQuote(lastData.snapshot,q);refreshQuoteUI(s,q);refreshFlow();saveQuoteCache(lastData);renderResearchAdvice();if(chartMode==='line')refreshIntradaySeries();if(s.assetHint==='ETF'&&etfNavData&&Date.now()-(etfNavData._clientTime||0)>15000)loadEtfNav(s)}catch{}}
 function setupLive(){
   clearInterval(liveTimer);liveTimer=null;
   if(market!=='TW'||!current)return;
@@ -253,7 +250,51 @@ function setupLive(){
   tick();
   liveTimer=setInterval(tick,DATA_REFRESH.quote);
 }
-async function search(raw){const code=String(raw||'').trim().toUpperCase();if(market==='TW'&&!/^\d{4,6}[A-Z]?$/.test(code))return toast('請輸入台股 / ETF 代號');if(market==='US'&&!/^[A-Z][A-Z0-9.\-]{0,9}$/.test(code))return toast('請輸入美股 ticker，例如 AAPL');current=code;$('#q').value=code;$('#status').innerHTML='<span class="loader"></span>讀取行情與圖表…';$('#stockResult').classList.add('hidden');const t=performance.now();try{let d;if(market==='TW'){const r=await fetch(`/api/stock?code=${encodeURIComponent(code)}&months=${months}`);d=await r.json();if(!r.ok)throw new Error(d.error||'台股資料失敗')}else{const key=localStorage.getItem('pulse-av-key')||'';if(!key){$('#avKey').value='';openSheet('settingsSheet');throw new Error('請先設定自己的免費 Alpha Vantage API Key')}const r=await fetch(`/api/us?symbol=${encodeURIComponent(code)}`,{headers:{'X-AV-Key':key}});d=await r.json();if(d.needsKey||d.error)throw new Error(d.error||d.note||'美股資料失敗')}renderMain(d);$('#status').textContent=`完成 ${((performance.now()-t)/1000).toFixed(1)} 秒 · ${d.meta?.latencyType||'公開資料'}`;history.replaceState(null,'',`?market=${market}&code=${encodeURIComponent(code)}`);localStorage.setItem('pulse-last',JSON.stringify({market,code}));if(market==='TW'){applyLive(code);setupLive()}else clearInterval(liveTimer)}catch(e){$('#status').textContent='查詢失敗：'+(e.message||'資料來源暫時無法使用')}}
+function partialStockData(code,q=null,reason=''){
+ const price=Number.isFinite(q?.price)?q.price:Number.isFinite(q?.prevClose)?q.prevClose:null;
+ const prev=Number.isFinite(q?.prevClose)?q.prevClose:null;
+ const change=Number.isFinite(q?.change)?q.change:(Number.isFinite(price)&&Number.isFinite(prev)?price-prev:null);
+ const changePct=Number.isFinite(q?.changePct)?q.changePct:(Number.isFinite(change)&&prev?change/prev*100:null);
+ const snapshot={code,name:q?.name||code,market:q?.market||'TWSE',date:q?.date||'',time:q?.time||'',close:price,prevClose:prev,change,changePct,open:q?.open??null,high:q?.high??null,low:q?.low??null,volume:q?.volume??null,tradeVolume:q?.tradeVolume??null,bidPrices:q?.bidPrices||[],bidVolumes:q?.bidVolumes||[],askPrices:q?.askPrices||[],askVolumes:q?.askVolumes||[],isRealtimePrice:/MIS/.test(String(q?.source||'')),assetHint:/^(00|006|007|008|009)/.test(code)?'ETF':'STOCK'};
+ const row=Number.isFinite(price)?[{date:snapshot.date||new Date().toISOString().slice(0,10),open:snapshot.open??price,high:snapshot.high??price,low:snapshot.low??price,close:price,volume:snapshot.volume??0}]:[];
+ return{snapshot,analysis:{score:50,label:'等待完整資料',level:'',reasons:[],ma5:null,ma20:null,rsi14:null,macd:{hist:null},kd:{k:null,d:null},volumeRatio:null,support20:null,resistance20:null},experts:[],history:row,series:{},meta:{months:1,tradingDays:row.length,generatedAt:new Date().toISOString(),latencyType:q?.source||'部分資料模式',partial:true,sourceErrors:reason?[reason]:[]}};
+}
+async function search(raw){
+ const code=String(raw||'').trim().toUpperCase();
+ if(market==='TW'&&!/^\d{4,6}[A-Z]?$/.test(code))return toast('請輸入台股 / ETF 代號');
+ if(market==='US'&&!/^[A-Z][A-Z0-9.\-]{0,9}$/.test(code))return toast('請輸入美股 ticker，例如 AAPL');
+ current=code;$('#q').value=code;$('#status').innerHTML='<span class="loader"></span>讀取行情與圖表…';
+ const t=performance.now();
+ try{
+  let d,warning='';
+  if(market==='TW'){
+   const [stockRes,quoteRes]=await Promise.allSettled([
+    fetch(`/api/stock?code=${encodeURIComponent(code)}&months=${months}&_=${Date.now()}`,{cache:'no-store'}),
+    fetch(`/api/quote?code=${encodeURIComponent(code)}&_=${Date.now()}`,{cache:'no-store'})
+   ]);
+   let stockJson=null,quoteJson=null;
+   if(stockRes.status==='fulfilled')try{stockJson=await stockRes.value.json()}catch{}
+   if(quoteRes.status==='fulfilled')try{quoteJson=await quoteRes.value.json()}catch{}
+   if(stockRes.status==='fulfilled'&&stockRes.value.ok&&stockJson?.snapshot){d=stockJson;if(quoteJson?.available)mergeAvailableQuote(d.snapshot,quoteJson)}
+   else{
+    warning=stockJson?.error||'完整歷史資料暫時無法取得';
+    if(!quoteJson?.available){try{const c=JSON.parse(localStorage.getItem(cacheKey('TW',code))||'null');if(c?.price!=null)quoteJson={available:true,code,name:c.name||code,market:'TWSE',date:c.date||'',price:Number(c.price),changePct:Number(c.changePct),source:'本機最近成功快照'}}catch{}}
+    d=partialStockData(code,quoteJson?.available?quoteJson:null,warning);
+   }
+  }else{
+   const key=localStorage.getItem('pulse-av-key')||'';
+   if(!key){$('#avKey').value='';openSheet('settingsSheet');throw new Error('請先設定自己的免費 Alpha Vantage API Key')}
+   const r=await fetch(`/api/us?symbol=${encodeURIComponent(code)}`,{headers:{'X-AV-Key':key}});d=await r.json();if(d.needsKey||d.error)throw new Error(d.error||d.note||'美股資料失敗')
+  }
+  renderMain(d);
+  $('#status').textContent=warning?`個股頁已開啟 · ${warning} · 其他欄位持續更新`:`完成 ${((performance.now()-t)/1000).toFixed(1)} 秒 · ${d.meta?.latencyType||'公開資料'}`;
+  history.replaceState(null,'',`?market=${market}&code=${encodeURIComponent(code)}`);localStorage.setItem('pulse-last',JSON.stringify({market,code}));
+  if(market==='TW'){applyLive(code);setupLive()}else clearInterval(liveTimer)
+ }catch(e){
+  if(market==='TW'){const d=partialStockData(code,null,e.message||'資料來源暫時無法使用');renderMain(d);$('#status').textContent='個股頁已開啟 · 行情來源暫時無法連線，資料恢復後會自動補上';setupLive()}
+  else $('#status').textContent='查詢失敗：'+(e.message||'資料來源暫時無法使用')
+ }
+}
 async function apiResearch(section,extra=''){const m=lastData.snapshot.market;const r=await fetch(`/api/research?code=${encodeURIComponent(current)}&market=${encodeURIComponent(m)}&section=${section}${extra}`);return await r.json()}
 async function fetchNewsItems(){if(newsItems)return newsItems;let mops=[];if(market==='TW')try{const e=await apiResearch('events');mops=e.data||[]}catch{}const j=await fetch(`/api/news?symbol=${encodeURIComponent(current)}&name=${encodeURIComponent(lastData.snapshot.name)}&market=${market}`).then(r=>r.json()),items=[];for(const x of (j.items||[]).slice(0,10))items.push(x);for(const x of mops.slice(0,4))items.push({title:x.title||'重大訊息',source:'MOPS 官方重大訊息',date:`${x.date||''} ${x.time||''}`,url:null});newsItems=items.slice(0,14);return newsItems}
 function newsHtml(x,compact=false){if(x.url)return `<a class="${compact?'newsPreviewItem':'newsItem'}" href="${E(x.url)}" target="_blank" rel="noopener"><div><b>${E(x.title)}</b><span>${E(x.source||'新聞來源')} · ${E(x.date||'')}</span></div>${compact?'':'<div class="arrow">↗</div>'}</a>`;return compact?`<div class="newsPreviewItem"><b>${E(x.title)}</b><span>${E(x.source)} · ${E(x.date||'')}</span></div>`:`<div class="eventItem"><div><b>${E(x.title)}</b><span>${E(x.source)} · ${E(x.date||'')}</span></div></div>`}
@@ -323,6 +364,7 @@ async function switchSub(id){
  $('#deepPanel').classList.remove('hidden');$$('.subTab').forEach(x=>x.classList.toggle('active',x.dataset.sub===id));$$('.subPanel').forEach(x=>x.classList.toggle('active',x.id===`sub-${id}`));if(id==='chips')loadChips();if(id==='fund')loadFund();if(id==='valuation')loadValuationPanel();if(id==='chain')loadSupplyChain();if(id==='company')loadCompany()}
 
 function openSymbol(m,c){setMarket(m);showScreen('market');$('#q').value=c;search(c)}
+window.openSymbol=openSymbol;
 async function loadIndustry(force=false){
  if(industryData&&!force&&industryData.market===industryMarket){renderIndustry();return}
  $('#industryChips').innerHTML='<div class="skeleton" style="min-width:220px;height:46px"></div>';$('#industryList').innerHTML='<div class="skeleton"></div>';$('#industrySource').innerHTML='<span class="loader"></span>讀取產業分類…';
@@ -362,7 +404,6 @@ function moveCalendar(n){calendarDate=new Date(calendarDate.getFullYear(),calend
 async function loadRadar(force=false){if(radarLoaded&&!force)return;radarLoaded=true;$('#radarList').innerHTML='<div class="skeleton"></div>';$('#refreshRadar').textContent='掃描中…';try{const j=await fetch('/api/radar',{cache:'no-store'}).then(r=>r.json()),a=j.items||[];$('#radarList').innerHTML=a.length?a.map((x,i)=>`<div class="radarCard" data-code="${E(x.code)}"><div class="rank">${i+1}</div><div><div class="radarName">${E(x.name)} ${E(x.code)} <span class="${x.changePct>0?'up':'down'}" style="margin-left:5px;font-size:11px">${x.changePct>0?'+':''}${fmt(x.changePct,2)}%</span></div><div class="radarReason">${E((x.reasons||[]).join(' · '))}${x.event?` · 重大訊息：${E(x.event.slice(0,42))}`:''}</div></div><div class="scoreBubble" title="綜合強勢分數">${x.score}</div></div>`).join(''):'<div class="empty">目前雷達資料暫時不足。</div>';$$('.radarCard').forEach(c=>c.onclick=()=>{setMarket('TW');showScreen('market');$('#q').value=c.dataset.code;search(c.dataset.code)})}catch(e){$('#radarList').innerHTML='<div class="empty">強勢雷達暫時無法使用：'+E(e.message)+'</div>'}finally{$('#refreshRadar').textContent='重新掃描'}}
 $$('[data-screen]').forEach(b=>b.onclick=()=>showScreen(b.dataset.screen));$$('.marketBtn').forEach(b=>b.onclick=()=>setMarket(b.dataset.market));$('#go').onclick=()=>search($('#q').value);$('#q').onkeydown=e=>{if(e.key==='Enter')search(e.target.value)};$('#favBtn').onclick=toggleFav;$('#adviceBtn').onclick=openAdvice;$('#etfHoldBtn').onclick=openETFHoldings;$('#etfFilter').oninput=e=>renderEtfHoldings(e.target.value);$('#newsMoreBtn').onclick=toggleNews;$('#settingsBtn').onclick=()=>{$('#avKey').value=localStorage.getItem('pulse-av-key')||'';openSheet('settingsSheet')};$('#backdrop').onclick=closeSheets;$$('.sheetClose,.popupClose').forEach(b=>b.onclick=closeSheets);$('#saveKey').onclick=()=>{const k=$('#avKey').value.trim();if(!k)return toast('請貼上 API Key');localStorage.setItem('pulse-av-key',k);closeSheets();toast('美股 Key 已儲存在此瀏覽器')};$('#clearKey').onclick=()=>{localStorage.removeItem('pulse-av-key');$('#avKey').value='';toast('已清除美股 Key')};$('#lineMode').onclick=()=>{chartMode='line';$('#lineMode').classList.add('active');$('#techMode').classList.remove('active');renderLineChart()};$('#techMode').onclick=()=>{chartMode='tech';$('#techMode').classList.add('active');$('#lineMode').classList.remove('active');renderTechChart()};$$('#intradayBar button').forEach(b=>b.onclick=()=>{intradayBucket=+b.dataset.bucket||60;$$('#intradayBar button').forEach(x=>x.classList.toggle('active',x===b));if(chartMode==='line')renderLineChart()});$$('#rangeBar button').forEach(b=>b.onclick=()=>{const n=+b.dataset.months;if(n===chartRangeMonths)return;loadChartRange(n)});$$('.subTab').forEach(b=>b.onclick=()=>switchSub(b.dataset.sub));$('#refreshWatch').onclick=refreshWatch;$('#refreshRadar').onclick=()=>loadRadar(true);$$('.industryMarket').forEach(b=>b.onclick=()=>setIndustryMarket(b.dataset.imarket));$('#industrySearch').oninput=renderIndustry;$('#calPrev').onclick=()=>moveCalendar(-1);$('#calNext').onclick=()=>moveCalendar(1);$('#refreshCalendar').onclick=()=>loadCalendar(true);$('#highYieldOnly').onclick=()=>{calendarHighOnly=!calendarHighOnly;renderDividendList()};
 renderQuick();renderWatch();try{const p=JSON.parse(localStorage.getItem('pulse-last')||'null');const u=new URLSearchParams(location.search),m=u.get('market')||p?.market,c=u.get('code');if(m&&['TW','US'].includes(m))setMarket(m);if(c){$('#q').value=c;search(c)}}catch{}
-
 
 (()=>{
 'use strict';
@@ -516,8 +557,6 @@ const oldApplyLive=applyLive;applyLive=async function(code){await oldApplyLive(c
 // Appearance / layout presets.
 function applyTheme(t){document.body.dataset.theme=t;localStorage.setItem('pulse-theme-v5',t);$('#themeLight')?.classList.toggle('active',t==='light');$('#themeDark')?.classList.toggle('active',t==='dark')}
 function applyLayout(v){V5.layout=v;localStorage.setItem('pulse-layout-v5',v);$$('[data-layout]').forEach(b=>b.classList.toggle('active',b.dataset.layout===v));let area=$('#stockResult');if(!area)return;area.dataset.layout=v}
-
-// v5 feature audit — explicit status, no greenwashing.
 const AUDIT=[
  ['即時報價／五檔','完整（台股公開近即時）','TWSE MIS 公開5秒快照；不是券商授權逐筆。'],
  ['K線 1/5/15/60分、日週月','完整／條件式','分K為當日瀏覽器累積快照聚合；日週月使用歷史OHLC。'],
@@ -799,7 +838,6 @@ window.PulseV5={loadDecisionLab,runCompare,audit:AUDIT,volumeProfile,resonance,b
   $v('#tourSkip')?.addEventListener('click',closeTour);
   $v('#tourReplay')?.addEventListener('click',()=>{closeSheets();openTour()});
 
-
   // Lightweight industry filters. TW uses exchange-wide official quote/valuation maps from /api/industry.
   function renderIndustry52(){
     if(!industryData)return;
@@ -823,7 +861,6 @@ window.PulseV5={loadDecisionLab,runCompare,audit:AUDIT,volumeProfile,resonance,b
   renderIndustry=renderIndustry52;
   if($v('#industrySearch'))$v('#industrySearch').oninput=renderIndustry52;
   ['#industryCap','#industryYield','#industryPe'].forEach(sel=>$v(sel)?.addEventListener('change',renderIndustry52));
-
 
   // Beginner-friendly institutional summary: keep the raw table, add one concise interpretation above it.
   function institutionStreak(inst){
@@ -909,10 +946,11 @@ window.PulseV5={loadDecisionLab,runCompare,audit:AUDIT,volumeProfile,resonance,b
       return
     }
     stopSpeech();
-    const u=new SpeechSynthesisUtterance(text);u.lang='zh-TW';u.rate=.96;u.pitch=1.02;const voice=pickVoice();if(voice)u.voice=voice;
+    const speechText=String(text||'').replace(/\b\d{4,6}[A-Z]?\b\s*/g,'').replace(/\s{2,}/g,' ').trim();const u=new SpeechSynthesisUtterance(speechText);u.lang='zh-TW';u.rate=.96;u.pitch=1.02;const voice=pickVoice();if(voice)u.voice=voice;
     u.onstart=()=>{activeCard=card;card.classList.add('speaking');card.classList.remove('speechPaused');if(btn)btn.textContent='Ⅱ 暫停'};
     u.onend=u.onerror=()=>{card.classList.remove('speaking','speechPaused');resetSpeechBtn(card);activeCard=null};
-    speechSynthesis.speak(u)
+    try{speechSynthesis.resume()}catch{}
+    setTimeout(()=>{try{speechSynthesis.speak(u)}catch(e){alert('語音播放失敗，請確認裝置未靜音並重新點一次播放。')}},60)
   }
   $q('#marketSpeakBtn')?.addEventListener('click',()=>speak('#marketBroadcast','#marketBroadcastText'));
   $q('#stockSpeakBtn')?.addEventListener('click',()=>speak('#stockBroadcast','#stockBroadcastText'));
@@ -1477,17 +1515,7 @@ window.ClariNaviV58={guardEtfVisibility,syncChartGroups,wirePortfolioRows,update
     qa('.broadcastCard').forEach(card=>card.classList.remove('speaking','v61Talking','v65Talking'));
   }
 
-  function stripCodesForSpeech(){
-    if(window.speechSynthesis&&window.SpeechSynthesisUtterance&&!window.__v61SpeechPatch){
-      window.__v61SpeechPatch=1;
-      const Native=window.SpeechSynthesisUtterance;
-      window.SpeechSynthesisUtterance=function(text){
-        const cleaned=String(text||'').replace(/\b\d{4,6}[A-Z]?\b\s*/g,'').replace(/\s{2,}/g,' ').trim();
-        return new Native(cleaned);
-      };
-      window.SpeechSynthesisUtterance.prototype=Native.prototype;
-    }
-  }
+  function stripCodesForSpeech(){ /* Keep the native SpeechSynthesisUtterance constructor intact for iOS/Safari compatibility. */ }
 
   function setDailyKActive(){
     try{window.ClariNaviV56&&(window.ClariNaviV56.state.frame='D')}catch{}
@@ -2393,10 +2421,6 @@ window.ClariNaviV58={guardEtfVisibility,syncChartGroups,wirePortfolioRows,update
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',inject,{once:true});else setTimeout(inject,100);
 })();
 
-
-
-
-
 (function(){
   const $=(s,r=document)=>r.querySelector(s);
   const $$=(s,r=document)=>Array.from(r.querySelectorAll(s));
@@ -2592,12 +2616,10 @@ window.ClariNaviV58={guardEtfVisibility,syncChartGroups,wirePortfolioRows,update
   ensureSettings(); ensurePanels();
 })();
 
-
 (function(){
   function clean(){document.querySelectorAll('.v83MouthDeck,.v58Mouth,.v61Mouth,.v65Aura,.v65Blink,.v65MouthDeck,.v65VoiceWave').forEach(x=>x.remove());document.querySelectorAll('.broadcastCard').forEach(c=>c.classList.remove('v83Talking','v65Talking','v61Talking','speaking'));}
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',clean,{once:true});else clean();
 })();
-
 
 /* Unified product behavior */
 (()=>{
@@ -2784,8 +2806,6 @@ window.ClariNaviV58={guardEtfVisibility,syncChartGroups,wirePortfolioRows,update
   function renderSector(){}
   function renderSectorFlow(){}
   function setSector(){}
-  function playSector(){}
-  function stopSector(){}
   async function loadSector(){q('#sectorReplay')?.remove();return window.ClariNaviMarketHome?.load?.(false)}
 
   const COST_CODES='2330,2454,2308';

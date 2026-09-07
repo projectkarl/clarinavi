@@ -19,20 +19,32 @@
     {
       "source": "/index.html",
       "headers": [
-        { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" },
-        { "key": "X-Content-Type-Options", "value": "nosniff" }
+        {
+          "key": "Cache-Control",
+          "value": "no-cache, no-store, must-revalidate"
+        },
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        }
       ]
     },
     {
       "source": "/(app.css|app.js)",
       "headers": [
-        { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }
+        {
+          "key": "Cache-Control",
+          "value": "no-cache, no-store, must-revalidate"
+        }
       ]
     },
     {
-      "source": "/(avatar-idle.webp|avatar-speaking.webp|guide-avatar.webp|icon-192.png|icon-512.png)",
+      "source": "/(avatar-frame-1.webp|avatar-frame-2.webp|avatar-frame-3.webp|avatar-frame-4.webp|avatar-frame-5.webp|avatar-frame-6.webp|avatar-idle.webp|avatar-speaking.webp|guide-avatar.webp|icon-192.png|icon-512.png)",
       "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=300, stale-while-revalidate=600" }
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=300, stale-while-revalidate=600"
+        }
       ]
     }
   ]

@@ -1,7 +1,7 @@
 {
   "name": "clarinavi",
   "private": true,
-  "description": "ClariNavi v14 lightweight stock research platform",
+  "description": "ClariNavi Ultimate — resilient individual-stock lightweight build",
   "scripts": {
     "start": "node server.js",
     "check": "node --check app.js && node --check server.js && node --check api/index.js"
@@ -9,5 +9,5 @@
   "engines": {
     "node": "22.x"
   },
-  "version": "14.0.0"
+  "version": "20.1.0"
 }

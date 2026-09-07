@@ -1,13 +1,15 @@
-# ClariNavi v14
+# ClariNavi v16 Unified Lightweight
 
-## v14 穩定性修正
-- 首頁版塊防重疊：統一 grid/min-width/overflow，手機與桌面皆避免卡片互壓。
-- 首頁資料改用單一前景更新節奏，避免多組 timer 不同步。
-- 首頁載入失敗保留最近成功資料；長時間 skeleton 會轉為明確載入狀態，不留空白區塊。
-- 台股排行與 ETF 盤中持續刷新；今日焦點與法人歷史成本分頻率更新。
-- 搜尋區只保留一個語音查詢按鈕；市場播報與個股解讀仍各自保留播放鍵。
-- 產業熱力圖只顯示即時/最新資料，歷史回放控制與殘留狀態移除。
-- 維持單一 app.css / app.js，不新增補丁檔。
+這是整合版，不需再疊加 v13 / v14 / v15 補丁。保留既有功能，並把首頁穩定性、資料多來源備援、個股頁與 iOS/Safari 語音修正整合到同一套核心。
+
+## 核心原則
+- 前端維持單一 `app.js` + `app.css`，不新增 patch 檔。
+- Vercel 維持單一 `/api/index.js` Serverless 入口，所有既有 API 功能保留。
+- 台股行情：MIS 優先，TWSE/TPEx 官方公開資料備援，必要時才使用 Yahoo Finance 延遲備援並清楚標示。
+- 首頁使用單一前景更新排程，避免多個 timer 互相搶資源。
+- 熱力圖只保留最新資料，不執行無資料的歷史回放。
+- 搜尋語音只保留一個入口；市場播報與個股解讀仍各自保留播放控制。
+- iPhone / Safari 保留原生 SpeechSynthesisUtterance，不覆寫瀏覽器建構子。
 
 # ClariNavi
 
