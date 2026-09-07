@@ -24,7 +24,13 @@
       ]
     },
     {
-      "source": "/(app.css|app.js|avatar-idle.webp|avatar-speaking.webp|guide-avatar.webp|icon-192.png|icon-512.png)",
+      "source": "/(app.css|app.js)",
+      "headers": [
+        { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }
+      ]
+    },
+    {
+      "source": "/(avatar-idle.webp|avatar-speaking.webp|guide-avatar.webp|icon-192.png|icon-512.png)",
       "headers": [
         { "key": "Cache-Control", "value": "public, max-age=300, stale-while-revalidate=600" }
       ]

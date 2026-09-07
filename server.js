@@ -35,7 +35,7 @@ function sendFile(req, res, name) {
   res.statusCode = 200;
   res.setHeader('Content-Type', MIME[ext] || 'application/octet-stream');
   const base = path.basename(full);
-  res.setHeader('Cache-Control', base === 'index.html' ? 'no-cache, no-store, must-revalidate' : 'public, max-age=300, stale-while-revalidate=600');
+  res.setHeader('Cache-Control', (base === 'index.html' || base === 'app.js' || base === 'app.css') ? 'no-cache, no-store, must-revalidate' : 'public, max-age=300, stale-while-revalidate=600');
   const accept = String(req.headers?.['accept-encoding'] || '');
   const br = full + '.br';
   if (/\bbr\b/.test(accept) && fs.existsSync(br)) {

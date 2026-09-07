@@ -1,12 +1,13 @@
 {
   "name": "clarinavi",
   "private": true,
-  "description": "ClariNavi unified lightweight market research platform",
+  "description": "ClariNavi v14 lightweight stock research platform",
   "scripts": {
     "start": "node server.js",
     "check": "node --check app.js && node --check server.js && node --check api/index.js"
   },
   "engines": {
     "node": "22.x"
-  }
+  },
+  "version": "14.0.0"
 }
